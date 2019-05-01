@@ -40,10 +40,14 @@ class PostController {
     }
 
     update(req, res) {
-        PostModel.findByIdAndUpdate(req.params.id, {$set: req.body}, err => {
+        PostModel.findByIdAndUpdate(req.params.id, {$set: req.body}, (err, result) => {
             if (err) {
                 res.send(err);
             }
+
+            result.createdAt = req.body.createdAt;
+            result.markModified('createdAt');
+            result.save();
 
             res.json({status: 'updated'});
         });
